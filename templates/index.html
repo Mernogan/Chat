@@ -2,47 +2,67 @@
 <html lang="ru">
 <head>
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: center;
-            height: 100vh;
-        }
-        #chat-container {
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            height: 400px;
-        }
-        #messages {
-            list-style: none;
-            margin: 0;
-            padding: 10px;
-            background-color: white;
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column-reverse; /* Новые сообщения будут сверху */
-        }
-        #message-input {
-            display: flex;
-        }
-        #message {
-            flex-grow: 1;
-            padding: 10px;
-        }
-        #username-container {
-            margin-bottom: 10px;
-        }
-        #username {
-            display: flex;
-            margin-right: 10px;
-        }
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    #messages {
+        flex-grow: 1;
+        overflow-y: auto; /* Позволяет прокручивать сообщения */
+        background-color: #f9f9f9;
+        padding: 10px;
+        margin: 0; /* Убираем отступы */
+        list-style: none;
+    }
+
+    #messages li {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 5px;
+        background-color: #e0e0e0;
+    }
+
+    #message-input {
+        display: flex;
+        background-color: #ffffff; /* Фон для ввода сообщений */
+        padding: 10px;
+        border-top: 1px solid #dddddd; /* Линия сверху */
+    }
+
+    #message {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #dddddd; /* Рамка поля ввода */
+        border-radius: 5px; /* Закругление введенного поля */
+    }
+
+    button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px; /* Закругление кнопок */
+        background-color: #007BFF; /* Цвет кнопок */
+        color: white; /* Цвет текста на кнопках */
+        cursor: pointer; /* Указатель при наведении */
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Темнее при наведении */
+    }
+
+    #username-container {
+        margin-bottom: 10px;
+        text-align: center; /* Центрируем контейнер имени пользователя */
+    }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,21 +70,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 </head>
 <body>
-    <h1>ОНЛАЙН-ЧАТ ДЛЯ СИГМ</h1>
+    <h1 style="text-align: center;">Проект Буркина Тимофея</h1>
     <div id="username-container">
         <input id="username" placeholder="Введите ваш ник" autocomplete="off">
         <button onclick="setUsername()">Войти</button>
     </div>
-    <div id="chat-container" style="display:none;">
-        <ul id="messages"></ul>
-        <div id="message-input">
-            <input id="message" placeholder="Введите сообщение" autocomplete="off">
-            <button id="sendbtn" onclick="sendMessage()">Отправить</button>
-        </div>
+    
+    <ul id="messages"></ul>
+
+    <div id="message-input">
+        <input id="message" placeholder="Введите сообщение" autocomplete="off">
+        <button id="sendbtn" onclick="sendMessage()">Отправить</button>
     </div>
     <script>
         var socket = io();
         var username;
+        const messagesList = document.getElementById('messages');
 
         document.getElementById('message').onkeypress = function(e) {
         if (e.keyCode === 13) {
@@ -117,6 +138,8 @@
             // Отправляем сообщение через сокет
             socket.emit('message', {username: username, message: msg});
             document.getElementById('message').value = ''; // Очищаем поле ввода
+            messagesList.scrollTop = messagesList.scrollHeight;
+
         }
     </script>
 </body>
