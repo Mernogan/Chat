@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
-
+import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dfsdhsdhsgfhsfsfgjsfkdh'
 socketio = SocketIO(app)
