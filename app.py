@@ -27,4 +27,5 @@ def handle_message(data):
     emit('message', {'username': username, 'message': msg}, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    port = int(os.environ.get('PORT', 10000))  # Use PORT from environment or default to 10000
+    socketio.run(app, host='0.0.0.0', port=port)
